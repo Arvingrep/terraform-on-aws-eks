@@ -12,17 +12,17 @@ terraform {
   backend "s3" {
     bucket = "terraform-stacksimplify"
     key    = "dev2/terraform.tfstate"
-    region = "us-east-1"  
+    region = "ap-southeast-1"  
 
     # For State Locking
-    dynamodb_table = "terraform-dev-state-table"
+    dynamodb_table = "dev-ekscluster"
   }
 }
 #####################################################################
 # Block-2: Provider Block
 provider "aws" {
   profile = "default" # AWS Credentials Profile configured on your local desktop terminal  $HOME/.aws/credentials
-  region  = "us-east-1"
+  region  = "ap-southeast-1"
 }
 #####################################################################
 # Block-3: Resource Block
@@ -90,7 +90,7 @@ module "ec2_cluster" {
 
   ami                    = data.aws_ami.amzlinux.id
   instance_type          = "t2.micro"
-  key_name               = "terraform-key"
+  key_name               = "devops"
   monitoring             = true
   vpc_security_group_ids = ["sg-08b25c5a5bf489ffa"]  # Get Default VPC Security Group ID and replace
   subnet_id              = "subnet-4ee95470" # Get one public subnet id from default vpc and replace

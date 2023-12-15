@@ -32,7 +32,7 @@ terraform apply -auto-approve
 
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # Verify Kubernetes Worker Nodes using kubectl
 kubectl get nodes
@@ -76,13 +76,13 @@ User: eksadmin2
 - Login to AWS Mgmt Console
   - **Username:** eksadmin2
   - **Password:** @EKSUser101
-- **Access URL:** https://console.aws.amazon.com/eks/home?region=us-east-1  
-- Go to Services -> Elastic Kubernetes Service -> Clusters -> Click on **hr-dev-eksdemo1**
+- **Access URL:** https://console.aws.amazon.com/eks/home?region=ap-southeast-1  
+- Go to Services -> Elastic Kubernetes Service -> Clusters -> Click on **arvin-dev-eksdemo1**
 - **Error**
 ```t
 # Error 
 Error loading clusters
-User: arn:aws:iam::180789647333:user/eksadmin2 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:us-east-1:180789647333:cluster/*
+User: arn:aws:iam::180789647333:user/eksadmin2 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:ap-southeast-1:180789647333:cluster/*
 ```
 
 ## Step-06: Configure Kubernetes configmap aws-auth with eksadmin2 user
@@ -162,7 +162,7 @@ aws configure list-profiles
 aws configure --profile eksadmin2
 AWS Access Key ID: AKIASUF7HC7SXRXBAGM6
 AWS Secret Access Key: ISxhW0UqsJ8F7navagIs8UqsKfKI22g9lO5SLruJ
-Default region: us-east-1
+Default region: ap-southeast-1
 Default output format: json
 
 # To list all your profile names
@@ -180,7 +180,7 @@ cat $HOME/.kube/config
 
 # Configure kubeconfig for kubectl with AWS CLI Profile eksadmin2
 aws eks --region <region-code> update-kubeconfig --name <cluster_name> --profile <AWS-CLI-Profile-NAME>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1 --profile eksadmin2
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1 --profile eksadmin2
 Observation:
 1. It should fail
 
@@ -192,9 +192,9 @@ cat $HOME/.kube/config
 Observation: At the end of kubeconfig file we find that AWS_PROFILE it is using is "eksadmin2" profile 
 
 ## ERROR MESSAGE
-Kalyans-MacBook-Pro:01-ekscluster-terraform-manifests kdaida$ aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1 --profile eksadmin2
+Kalyans-MacBook-Pro:01-ekscluster-terraform-manifests kdaida$ aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1 --profile eksadmin2
 
-An error occurred (AccessDeniedException) when calling the DescribeCluster operation: User: arn:aws:iam::180789647333:user/eksadmin2 is not authorized to perform: eks:DescribeCluster on resource: arn:aws:eks:us-east-1:180789647333:cluster/hr-dev-eksdemo1
+An error occurred (AccessDeniedException) when calling the DescribeCluster operation: User: arn:aws:iam::180789647333:user/eksadmin2 is not authorized to perform: eks:DescribeCluster on resource: arn:aws:eks:ap-southeast-1:180789647333:cluster/arvin-dev-eksdemo1
 Kalyans-MacBook-Pro:01-ekscluster-terraform-manifests kdaida$ 
 ```
 
@@ -234,7 +234,7 @@ aws iam attach-user-policy --policy-arn arn:aws:iam::180789647333:policy/eks-ful
 - Login to AWS Mgmt Console
   - **Username:** eksadmin2
   - **Password:** @EKSUser101
-- Go to Services -> Elastic Kubernetes Service -> Clusters -> Click on **hr-dev-eksdemo1**
+- Go to Services -> Elastic Kubernetes Service -> Clusters -> Click on **arvin-dev-eksdemo1**
 - All 3 tabs should be accessible to us without any issues with eksadmin1 user
   - Overview Tab
   - Workloads Tab
@@ -252,7 +252,7 @@ cat $HOME/.kube/config
 
 # Configure kubeconfig for kubectl with AWS CLI Profile eksadmin2
 aws eks --region <region-code> update-kubeconfig --name <cluster_name> --profile <AWS-CLI-Profile-NAME>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1 --profile eksadmin2
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1 --profile eksadmin2
 Observation:
 1. It should pass
 

@@ -21,9 +21,9 @@ description: Learn the concept EKS IRSA - IAM Roles for Service Accounts
 ```t
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
  
     # For State Locking
     dynamodb_table = "dev-ekscluster"    
@@ -37,9 +37,9 @@ description: Learn the concept EKS IRSA - IAM Roles for Service Accounts
 ```t
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
  
     # For State Locking
     dynamodb_table = "dev-ekscluster"    
@@ -115,8 +115,8 @@ output "aws_iam_openid_connect_provider_extract_from_arn" {
 - **Sample Output for reference**
 ```t
 # Sample Outputs for Reference
-aws_iam_openid_connect_provider_arn = "arn:aws:iam::180789647333:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
-aws_iam_openid_connect_provider_extract_from_arn = "oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
+aws_iam_openid_connect_provider_arn = "arn:aws:iam::180789647333:oidc-provider/oidc.eks.ap-southeast-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
+aws_iam_openid_connect_provider_extract_from_arn = "oidc.eks.ap-southeast-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
 ```
 
 ## Step-08: Create EKS Cluster: Execute Terraform Commands (If not created)
@@ -140,7 +140,7 @@ terraform apply -auto-approve
 ```t
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # Verify Kubernetes Worker Nodes using kubectl
 kubectl get nodes
@@ -155,22 +155,22 @@ Go to Services -> EC2 -> Instances -> hr-dev-BastionHost -> Instance State -> St
 - **Discovery:** Defines how Clients dynamically discover information about OpenID Providers
 ```t
 # Get OpenID Connect provider URL for EKS Cluster
-Go to Services -> EKS -> hr-dev-eksdemo1 -> Configuration -> Details -> OpenID Connect provider URL
+Go to Services -> EKS -> arvin-dev-eksdemo1 -> Configuration -> Details -> OpenID Connect provider URL
 
 # EKS OpenID Connect Well Known Configuration URL
 <EKS OpenID Connect provider URL>/.well-known/openid-configuration
 
 # Sample
-https://oidc.eks.us-east-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/.well-known/openid-configuration
+https://oidc.eks.ap-southeast-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/.well-known/openid-configuration
 ```
 - **Sample Output from EKS OpenID Connect Well Known Configuration URL**
 ```json
 // 20220106104407
-// https://oidc.eks.us-east-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/.well-known/openid-configuration
+// https://oidc.eks.ap-southeast-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/.well-known/openid-configuration
 
 {
-  "issuer": "https://oidc.eks.us-east-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC",
-  "jwks_uri": "https://oidc.eks.us-east-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/keys",
+  "issuer": "https://oidc.eks.ap-southeast-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC",
+  "jwks_uri": "https://oidc.eks.ap-southeast-1.amazonaws.com/id/EC973221A6C1BC248C79CFD5455EEECC/keys",
   "authorization_endpoint": "urn:kubernetes:programmatic_authorization",
   "response_types_supported": [
     "id_token"
@@ -218,9 +218,9 @@ terraform {
   }
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-irsa-demo/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
 
     # For State Locking
     dynamodb_table = "dev-eks-irsa-demo"    
@@ -234,7 +234,7 @@ terraform {
 data "terraform_remote_state" "eks" {
   backend = "s3"
   config = {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
     region = var.aws_region
   }
@@ -248,7 +248,7 @@ data "terraform_remote_state" "eks" {
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
   type = string
-  default = "us-east-1"  
+  default = "ap-southeast-1"  
 }
 # Environment Variable
 variable "environment" {
@@ -285,7 +285,7 @@ locals {
 ```t
 # Terraform AWS Provider Block
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-southeast-1"
 }
 
 data "aws_eks_cluster" "cluster" {
@@ -400,9 +400,9 @@ resource "kubernetes_job_v1" "irsa_demo" {
 - **Folder:** 02-eks-irsa-demo-terraform-manifests
 ```t
 # Generic Variables
-aws_region = "us-east-1"
+aws_region = "ap-southeast-1"
 environment = "dev"
-business_divsion = "hr"
+business_divsion = "arvin"
 ```
 ## Step-21: Execute Terraform Commands
 - **Folder:** 02-eks-irsa-demo-terraform-manifests

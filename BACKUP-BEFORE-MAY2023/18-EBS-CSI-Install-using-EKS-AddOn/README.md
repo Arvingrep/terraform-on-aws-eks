@@ -22,7 +22,7 @@ terraform state list
 
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # List EKS Worker Nodes
 kubectl get nodes -o wide
@@ -57,9 +57,9 @@ terraform {
   }
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/ebs-addon/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
 
     # For State Locking
     dynamodb_table = "dev-ebs-addon"    
@@ -100,7 +100,7 @@ output "ebs_eks_addon_id" {
 ## Step-08: Create EBS CSI Driver EKS AddOn: Execute TF Commands
 ```t
 # EKS List AddOns for a EKS Cluster
-aws eks list-addons --cluster-name hr-dev-eksdemo1
+aws eks list-addons --cluster-name arvin-dev-eksdemo1
 Observation:
 1. Before installing the addon we will check if any addons installed
 
@@ -123,7 +123,7 @@ terraform apply -auto-approve
 ## Step-09: Verify EBS CSI Driver installed via EKS Addon
 ```t
 # EKS List AddOns for a EKS Cluster
-aws eks list-addons --cluster-name hr-dev-eksdemo1
+aws eks list-addons --cluster-name arvin-dev-eksdemo1
 
 ## Sample Output
 {
@@ -134,7 +134,7 @@ aws eks list-addons --cluster-name hr-dev-eksdemo1
 
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # List EBS Pods from kube-system namespace
 kubectl -n kube-system get pods 

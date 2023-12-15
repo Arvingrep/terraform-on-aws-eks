@@ -12,7 +12,7 @@ resource "helm_release" "loadbalancer_controller" {
 
   set {
     name = "image.repository"
-    value = "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller" # Changes based on Region - This is for us-east-1 Additional Reference: https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
+    value = "602401143452.dkr.ecr.ap-southeast-1.amazonaws.com/amazon/aws-load-balancer-controller" # Changes based on Region - This is for ap-southeast-1 Additional Reference: https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
   }       
 
   set {

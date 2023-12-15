@@ -105,7 +105,7 @@ terraform apply -auto-approve
 
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # Verify Kubernetes Worker Nodes using kubectl
 kubectl get nodes
@@ -117,7 +117,7 @@ kubectl get nodes -o wide
 ```t
 # List Fargate Profiles
 aws eks list-fargate-profiles --cluster <CLUSTER_NAME>
-aws eks list-fargate-profiles --cluster hr-dev-eksdemo1
+aws eks list-fargate-profiles --cluster arvin-dev-eksdemo1
 ```
 ## Step-09: Review aws-auth ConfigMap for Fargate Profiles related Entry
 - When AWS Fargate Profile is created on EKS Cluster, `aws-auth` configmap is updated in EKS Cluster with the IAM Role we are using for Fargate Profiles. 
@@ -151,7 +151,7 @@ Kalyans-MacBook-Pro:04-fargate-profiles-terraform-manifests kdaida$
 
 # Verify Fargate Profiles via AWS Mgmt Console
 1. Login to AWS Mgmt console with same user with which we are created the EKS Cluster. In my casr it is "kalyandev" user
-2. Go to Services -> Elastic Kubernetes Services -> Clusters -> hr-dev-eksdemo1
+2. Go to Services -> Elastic Kubernetes Services -> Clusters -> arvin-dev-eksdemo1
 3. Go to "Configuration" Tab -> "Compute Tab"   
 4. Review the Fargate profile in "Fargate profiles" section
 ```

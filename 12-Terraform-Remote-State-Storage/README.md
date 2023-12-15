@@ -56,9 +56,9 @@ description: Implement Terraform Remote State Storage with AWS S3 and DynamnoDB
 ```t
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
  
     # For State Locking
     dynamodb_table = "dev-ekscluster"    
@@ -70,9 +70,9 @@ description: Implement Terraform Remote State Storage with AWS S3 and DynamnoDB
 - Update `environment` to `dev`
 ```t
 # Generic Variables
-aws_region = "us-east-1"
+aws_region = "ap-southeast-1"
 environment = "dev"
-business_divsion = "hr"
+business_divsion = "arvin"
 ```
 
 ## Step-05: Add State Locking Feature using DynamoDB Table
@@ -129,9 +129,9 @@ Observation:
 ```t
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/app1k8s/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
 
     # For State Locking
     dynamodb_table = "dev-app1k8s"    
@@ -145,9 +145,9 @@ Observation:
 data "terraform_remote_state" "eks" {
   backend = "s3"
   config = {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
   }
 }
 ```
@@ -189,7 +189,7 @@ Observation:
 ```t
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # List Worker Nodes
 kubectl get nodes
@@ -217,7 +217,7 @@ Observation:
 
 # Access Sample Application on Browser
 http://<LB-DNS-NAME>
-http://abb2f2b480148414f824ed3cd843bdf0-805914492.us-east-1.elb.amazonaws.com
+http://abb2f2b480148414f824ed3cd843bdf0-805914492.ap-southeast-1.elb.amazonaws.com
 ```
 
 

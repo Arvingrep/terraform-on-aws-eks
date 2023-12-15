@@ -19,9 +19,9 @@ terraform {
   }
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-vpa-demo-app/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
 
     # For State Locking
     dynamodb_table = "dev-vpa-demo-app"    

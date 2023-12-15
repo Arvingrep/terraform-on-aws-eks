@@ -1,28 +1,34 @@
 # Design a 3 Tier AWS VPC with NAT Gateways using Terraform
 
 ## Step-01: Introduction
+
 - Understand about Terraform Modules
 - Create VPC using `Terraform Modules`
 - Define `Input Variables` for VPC module and reference them in VPC Terraform Module
 - Define `local values` and reference them in VPC Terraform Module
 - Create `terraform.tfvars` to load variable values by default from this file
-- Create `vpc.auto.tfvars` to load variable values by default from this file related to a VPC 
+- Create `vpc.auto.tfvars` to load variable values by default from this file related to a VPC
 - Define `Output Values` for VPC
 
 ## Step-02: v1-vpc-module - Hardcoded Model
+
 ### Step-02-01: How to make a decision of using the public Registry module?
+
 1. Understand about [Terraform Registry and Modules](https://registry.terraform.io/)
 2. We are going to use a [VPC Module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest) from Terraform Public Registry
 3. Understand about Authenticity of a module hosted on Public Terraform Registry with [HashiCorp Verified Tag](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest)
 4. Review the download rate for that module
 5. Review the latest versions and [release history](https://github.com/terraform-aws-modules/terraform-aws-vpc/releases) of that module
-6. Review our feature needs when using that module and ensure if our need is satisfied use the module else use the standard terraform resource definition appraoch. 
-7. Review module inputs, outputs and dependencies too. 
-### Step-02-02: Create a VPC Module Terraform Configuration 
+6. Review our feature needs when using that module and ensure if our need is satisfied use the module else use the standard terraform resource definition appraoch.
+7. Review module inputs, outputs and dependencies too.
+
+### Step-02-02: Create a VPC Module Terraform Configuration
+
 - c1-versions.tf
 - c2-generic-variables.tf
 - c3-vpc.tf
 - [Terraform AWS VPC Module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest)
+
 ```t
 # Create VPC Terraform Module
 module "vpc" {
@@ -32,7 +38,7 @@ module "vpc" {
   # VPC Basic Details
   name = "vpc-dev"
   cidr = "10.0.0.0/16"   
-  azs                 = ["us-east-1a", "us-east-1b"]
+  azs                 = ["ap-southeast-1a", "ap-southeast-1b"]
   private_subnets     = ["10.0.1.0/24", "10.0.2.0/24"]
   public_subnets      = ["10.0.101.0/24", "10.0.102.0/24"]
 
@@ -76,6 +82,7 @@ module "vpc" {
 ```
 
 ## Step-03: Execute Terraform Commands
+
 ```t
 # Working Folder
 terraform-manifests/v1-vpc-module
@@ -113,6 +120,7 @@ rm -rf terraform.tfstate*
 ```
 
 ## Step-04: Version Constraints in Terraform with Modules
+
 - [Terraform Version Constraints](https://www.terraform.io/docs/language/expressions/version-constraints.html)
 - For modules locking to the exact version is recommended to ensure there will not be any major breakages in production
 - When depending on third-party modules, require specific versions to ensure that updates only happen when convenient to you
@@ -120,15 +128,17 @@ rm -rf terraform.tfstate*
 - [Review and understand this carefully](https://www.terraform.io/docs/language/expressions/version-constraints.html#terraform-core-and-provider-versions)
 
 ## Step-05: v2-vpc-module-standardized - Standardized and Generalized
+
 - In the next series of steps we are going to standardize the VPC configuration
 - c2-generic-variables.tf
+
 ```t
 # Input Variables
 # AWS Region
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
   type = string
-  default = "us-east-1"  
+  default = "ap-southeast-1"  
 }
 # Environment Variable
 variable "environment" {
@@ -145,7 +155,9 @@ variable "business_divsion" {
 ```
 
 ## Step-06: c3-local-values.tf
+
 - Understand about [Local Values](https://www.terraform.io/docs/language/values/locals.html)
+
 ```t
 # Define Local Values in Terraform
 locals {
@@ -154,12 +166,13 @@ locals {
   name = "${var.business_divsion}-${var.environment}"
   common_tags = {
     owners = local.owners
-    environment = local.environment     
+    environment = local.environment   
   }
 }
 ```
 
 ## Step-07: c4-01-vpc-variables.tf
+
 ```t
 # VPC Input Variables
 
@@ -181,7 +194,7 @@ variable "vpc_cidr_block" {
 variable "vpc_availability_zones" {
   description = "VPC Availability Zones"
   type = list(string)
-  default = ["us-east-1a", "us-east-1b"]
+  default = ["ap-southeast-1a", "ap-southeast-1b"]
 }
 
 # VPC Public Subnets
@@ -234,7 +247,9 @@ variable "vpc_single_nat_gateway" {
   default = true
 }
 ```
+
 ## Step-08: c4-02-vpc-module.tf
+
 ```t
 # Create VPC Terraform Module
 module "vpc" {
@@ -280,7 +295,9 @@ module "vpc" {
   }
 }
 ```
+
 ## Step-09: c4-03-vpc-outputs.tf
+
 ```t
 # VPC Output Values
 
@@ -320,20 +337,23 @@ output "azs" {
   value       = module.vpc.azs
 }
 ```
+
 ## Step-10: terraform.tfvars
+
 ```t
 # Generic Variables
-aws_region = "us-east-1"  
+aws_region = "ap-southeast-1"  
 environment = "dev"
-business_divsion = "HR"
+business_divsion = "ARVIN"
 ```
 
 ## Step-11: vpc.auto.tfvars
+
 ```t
 # VPC Variables
 vpc_name = "myvpc"
 vpc_cidr_block = "10.0.0.0/16"
-vpc_availability_zones = ["us-east-1a", "us-east-1b"]
+vpc_availability_zones = ["ap-southeast-1a", "ap-southeast-1b"]
 vpc_public_subnets = ["10.0.101.0/24", "10.0.102.0/24"]
 vpc_private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
 vpc_database_subnets= ["10.0.151.0/24", "10.0.152.0/24"]
@@ -343,9 +363,9 @@ vpc_enable_nat_gateway = true
 vpc_single_nat_gateway = true
 ```
 
-
 ## Step-12: Execute Terraform Commands
-```t
+
+```
 # Working Folder
 terraform-manifests/v2-vpc-module-standardized
 
@@ -373,6 +393,7 @@ Observation:
 ```
 
 ## Step-13: Clean-Up
+
 ```t
 # Terraform Destroy
 terraform destroy -auto-approve

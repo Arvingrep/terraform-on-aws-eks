@@ -1,7 +1,7 @@
 # Terraform Variables and Datasources
 
 ## Step-00: Pre-requisite Note
-- Create a `terraform-key` in AWS EC2 Key pairs which we will reference in our EC2 Instance
+- Create a `devops` in AWS EC2 Key pairs which we will reference in our EC2 Instance
 
 ## Step-01: Introduction
 ### Terraform Concepts
@@ -21,7 +21,7 @@
   - Public IP
   - Public DNS
 4. Get latest EC2 AMI ID Using `Terraform Datasources` concept
-5. We are also going to use existing EC2 Key pair `terraform-key`
+5. We are also going to use existing EC2 Key pair `devops`
 6. Use all the above to create an EC2 Instance in default VPC
 
 
@@ -33,7 +33,7 @@
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
   type = string
-  default = "us-east-1"  
+  default = "ap-southeast-1"  
 }
 
 # AWS EC2 Instance Type
@@ -47,7 +47,7 @@ variable "instance_type" {
 variable "instance_keypair" {
   description = "AWS EC2 Key pair that need to be associated with EC2 Instance"
   type = string
-  default = "terraform-key"
+  default = "devops"
 }
 ```
 - Reference the variables in respective `.tf`fies

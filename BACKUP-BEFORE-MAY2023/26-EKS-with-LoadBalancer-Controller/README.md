@@ -37,7 +37,7 @@ resource "aws_eks_node_group" "eks_ng_public" {
   
   
   remote_access {
-    ec2_ssh_key = "eks-terraform-key"
+    ec2_ssh_key = "devops"
   }
 
   scaling_config {
@@ -90,7 +90,7 @@ resource "aws_eks_node_group" "eks_ng_private" {
   
   
   remote_access {
-    ec2_ssh_key = "eks-terraform-key"    
+    ec2_ssh_key = "devops"    
   }
 
   scaling_config {
@@ -233,7 +233,7 @@ terraform apply -auto-approve
 
 # Configure kubeconfig for kubectl
 aws eks --region <region-code> update-kubeconfig --name <cluster_name>
-aws eks --region us-east-1 update-kubeconfig --name hr-dev-eksdemo1
+aws eks --region ap-southeast-1 update-kubeconfig --name arvin-dev-eksdemo1
 
 # Verify Kubernetes Worker Nodes using kubectl
 kubectl get nodes
@@ -274,9 +274,9 @@ terraform {
   }
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/aws-lbc/terraform.tfstate"
-    region = "us-east-1" 
+    region = "ap-southeast-1" 
 
     # For State Locking
     dynamodb_table = "dev-aws-lbc"    
@@ -300,7 +300,7 @@ provider "http" {
 data "terraform_remote_state" "eks" {
   backend = "s3"
   config = {
-    bucket = "terraform-on-aws-eks"
+    bucket = "terraform-on"
     key    = "dev/eks-cluster/terraform.tfstate"
     region = var.aws_region
   }
@@ -314,7 +314,7 @@ data "terraform_remote_state" "eks" {
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
   type = string
-  default = "us-east-1"  
+  default = "ap-southeast-1"  
 }
 # Environment Variable
 variable "environment" {
@@ -450,7 +450,7 @@ resource "helm_release" "loadbalancer_controller" {
 
   set {
     name = "image.repository"
-    value = "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller" # Changes based on Region - This is for us-east-1 Additional Reference: https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
+    value = "602401143452.dkr.ecr.ap-southeast-1.amazonaws.com/amazon/aws-load-balancer-controller" # Changes based on Region - This is for ap-southeast-1 Additional Reference: https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
   }       
 
   set {

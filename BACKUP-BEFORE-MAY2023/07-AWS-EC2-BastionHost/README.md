@@ -33,24 +33,24 @@ data "aws_availability_zones" "available" {
 }
 
 # Change-2: Update the same in VPC Module
-  azs             = data.aws_availability_zones.available.names
+  azs             = var.vpc_availability_zones
 
 # Change-3: Comment vpc_availability_zones variable in File: c3-01-vpc-variables.tf
 /*
 variable "vpc_availability_zones" {
   description = "VPC Availability Zones"
   type = list(string)
-  default = ["us-east-1a", "us-east-1b"]
+  default = ["ap-southeast-1a", "ap-southeast-1b"]
 }
 */
 
 # Change-4: Comment hard-coded Availability Zones variable in File: vpc.auto.tfvars 
-#vpc_availability_zones = ["us-east-1a", "us-east-1b"]  
+vpc_availability_zones = ["ap-southeast-1a", "ap-southeast-1b"]  
 ```
 
 ## Step-02: Create EC2 Key pair and save it
 - Go to Services -> EC2 -> Network & Security -> Key Pairs -> Create Key Pair
-- **Name:** eks-terraform-key
+- **Name:** devops
 - **Key Pair Type:** RSA (leave to defaults)
 - **Private key file format:** .pem
 - Click on **Create key pair**
@@ -59,7 +59,7 @@ variable "vpc_availability_zones" {
 ```t
 # Provider Permissions to EC2 Key Pair
 cd terraform-manifests/private-key
-chmod 400 eks-terraform-key.pem
+chmod 400 devops.pem
 ```
 ## Step-03: c4-01-ec2bastion-variables.tf
 ```t
@@ -76,7 +76,7 @@ variable "instance_type" {
 variable "instance_keypair" {
   description = "AWS EC2 Key pair that need to be associated with EC2 Instance"
   type = string
-  default = "eks-terraform-key"
+  default = "devops"
 }
 ```
 ## Step-04: c4-03-ec2bastion-securitygroups.tf
@@ -165,18 +165,18 @@ resource "null_resource" "copy_ec2_keys" {
     host     = aws_eip.bastion_eip.public_ip    
     user     = "ec2-user"
     password = ""
-    private_key = file("private-key/eks-terraform-key.pem")
+    # private_key = file("private-key/devops.pem")
   }  
 
-## File Provisioner: Copies the terraform-key.pem file to /tmp/terraform-key.pem
+## File Provisioner: Copies the devops.pem file to /tmp/devops.pem
   provisioner "file" {
-    source      = "private-key/eks-terraform-key.pem"
-    destination = "/tmp/eks-terraform-key.pem"
+    source      = "private-key/devops.pem"
+    destination = "/tmp/devops.pem"
   }
 ## Remote Exec Provisioner: Using remote-exec provisioner fix the private key permissions on Bastion Host
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod 400 /tmp/eks-terraform-key.pem"
+      "sudo chmod 400 /tmp/devops.pem"
     ]
   }
 ## Local Exec Provisioner:  local-exec provisioner (Creation-Time Provisioner - Triggered during Create Resource)
@@ -192,7 +192,7 @@ resource "null_resource" "copy_ec2_keys" {
 ## Step-09: ec2bastion.auto.tfvars
 ```t
 instance_type = "t3.micro"
-instance_keypair = "eks-terraform-key"
+instance_keypair = "devops"
 ```
 
 ## Step-10: c4-02-ec2bastion-outputs.tf
@@ -249,7 +249,7 @@ module "vpc" {
   # VPC Basic Details
   name = local.eks_cluster_name
   cidr = var.vpc_cidr_block
-  azs             = data.aws_availability_zones.available.names
+  azs             = var.vpc_availability_zones
   public_subnets  = var.vpc_public_subnets
   private_subnets = var.vpc_private_subnets  
 
@@ -312,13 +312,13 @@ terraform apply -auto-approve
 4. Connect to Bastion EC2 Instnace
 ```t
 # Connect to Bastion EC2 Instance
-ssh -i private-key/eks-terraform-key.pem ec2-user@<Elastic-IP-Bastion-Host>
+ssh -i private-key/devops.pem ec2-user@<Elastic-IP-Bastion-Host>
 sudo su -
 
 # Verify File and Remote Exec Provisioners moved the EKS PEM file
 cd /tmp
 ls -lrta
-Observation: We should find the file named "eks-terraform-key.pem" moved from our local desktop to Bastion EC2 Instance "/tmp" folder
+Observation: We should find the file named "devops.pem" moved from our local desktop to Bastion EC2 Instance "/tmp" folder
 ```
 
 ## Step-17: Clean-Up
